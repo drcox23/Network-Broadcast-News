@@ -14,6 +14,7 @@ const server = net.createServer(client => {
   //incoming data:
   client.on("data", data => {
     const msg = data.toString();
+
     console.log(msg);
     if (!client.username) {
       if (msg.toLowerCase().includes("admin")) {
@@ -27,18 +28,24 @@ const server = net.createServer(client => {
     // console.log(client.address());
     // console.log("sock: ", socket);
 
-    allClients.forEach(socket => {
-      if (socket === client) return;
-      socket.write(`${client.username}: + "" + "${msg}"`);
-      // console.log("elemental: ", element);
-    });
+    if (client.username && !client.usernameSet) {
+      // Client's first input will be set as the client's username:
+
+      console.log(client.id + " SET USERNAME: " + client.username);
+      client.usernameSet = true;
+    } else if (client.usernameSet) {
+      // Client's message will be logged and dispatched to other clients:
+
+      allClients.forEach(socket => {
+        if (socket === client) return;
+        socket.write(client.username + ":" + "" + msg);
+      });
+      console.log("FROM " + client.id + ": " + data);
+    }
+
+    allClients.push(client);
+    // console.log("clients: ", allClients);
   });
-
-  // console.log("socket:", socket);
-  // if()
-
-  allClients.push(client);
-  // console.log("clients: ", allClients);
 });
 
 server.listen(6969, () => {
