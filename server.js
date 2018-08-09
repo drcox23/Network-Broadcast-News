@@ -43,6 +43,14 @@ const server = net.createServer(client => {
       console.log("FROM " + client.id + ": " + data);
     }
 
+    if (msg.includes("\time")) {
+      client.write("THE TIME IS NOW... ");
+    }
+
+    process.stdin.on("data", data => {
+      client.write(`ADMIN: ${data.toString()}`);
+    });
+
     allClients.push(client);
     // console.log("clients: ", allClients);
   });
