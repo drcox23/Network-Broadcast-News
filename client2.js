@@ -1,6 +1,6 @@
 const net = require("net");
 
-const client = net.createConnection(6969, "0.0.0.0", () => {
+const client = net.createConnection(2877, "34.219.80.229", () => {
   console.log("Connected");
   setUserName();
   // console.log(net);

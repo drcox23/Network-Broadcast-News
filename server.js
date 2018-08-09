@@ -38,15 +38,17 @@ const server = net.createServer(client => {
 
       allClients.forEach(socket => {
         if (socket === client) return;
-        socket.write(client.username + ":" + "" + msg);
+        socket.write(client.username + ": " + msg);
       });
       console.log("FROM " + client.id + ": " + data);
     }
 
+    // receive a command and respond
     if (msg.includes("\time")) {
       client.write("THE TIME IS NOW... ");
     }
 
+    // get the admin to talk to clients
     process.stdin.on("data", data => {
       client.write(`ADMIN: ${data.toString()}`);
     });
